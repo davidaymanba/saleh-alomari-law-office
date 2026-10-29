@@ -1,0 +1,329 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/*
+ * الهوية البصرية: عمارة نجدية — جدار طيني، شُرفات مثلثة، ليل الصحراء.
+ * ink: حبر/ليل — paper: جص — sand: طين فاتح — clay: طين محروق (لون التمييز)
+ */
+@theme {
+  --color-ink: #16120f;
+  --color-ink-2: #241d18;
+  --color-ink-3: #3a3029;
+  --color-paper: #f5f0e7;
+  --color-sand: #ebe1cf;
+  --color-sand-2: #dccbb0;
+  --color-clay: #97492a;
+  --color-clay-2: #7d3b20;
+  --color-clay-soft: #d39a70;
+  --color-muted: #6a5d51;
+  --color-muted-dark: #b3a593;
+
+  --font-sans: var(--font-plex), system-ui, sans-serif;
+  --font-display: var(--font-reem), var(--font-plex), sans-serif;
+
+  --ease-settle: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-najdi: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/*
+ * الوضع الليلي: تنقلب أرضية الصفحة ونصها، بينما تبقى الأقسام الداكنة (.on-dark)
+ * داكنة بدرجة أفتح قليلًا من الأرضية لتظهر كطبقة مستقلة.
+ */
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --color-ink: #ece4d6;
+  --color-ink-2: #d8cdbd;
+  --color-ink-3: #b9ab98;
+  --color-paper: #13100d;
+  --color-sand: #1c1713;
+  --color-sand-2: #2a221c;
+  --color-clay: #d4875a;
+  --color-clay-soft: #e0a77d;
+  --color-muted: #a99a88;
+}
+html[data-theme="dark"] .on-dark {
+  --color-ink: #1d1814;
+  --color-ink-2: #262019;
+  --color-ink-3: #3a3029;
+  --color-paper: #ece4d6;
+  --color-clay: #a4542f;
+  --color-clay-soft: #dca27a;
+}
+
+/* انتقال تبديل المظهر: دائرة تتسع من زر التبديل (View Transitions) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+@layer base {
+  html {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background: var(--color-paper);
+    line-height: 1.8;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    line-height: 1.35;
+    font-weight: 600;
+  }
+
+  ::selection {
+    background: var(--color-clay);
+    color: var(--color-paper);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-clay);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  .on-dark :focus-visible {
+    outline-color: var(--color-clay-soft);
+  }
+
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
+}
+
+/* ——— Lenis ——— */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+/* ——— تخطيط ——— */
+@utility container-x {
+  width: 100%;
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+  @media (min-width: 768px) {
+    padding-inline: 2rem;
+  }
+}
+
+@utility eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--color-clay);
+  &::before {
+    content: "";
+    width: 0.55rem;
+    height: 0.55rem;
+    background: currentColor;
+    clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  }
+}
+
+/* شريط الشُّرفات النجدية المدرّجة — يأخذ لونه من currentColor */
+@utility crenellation {
+  height: 1rem;
+  width: 100%;
+  background-color: currentColor;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 16'%3E%3Cpath d='M2 16V12H6V8H10V4H14V0H18V4H22V8H26V12H30V16Z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 16'%3E%3Cpath d='M2 16V12H6V8H10V4H14V0H18V4H22V8H26V12H30V16Z'/%3E%3C/svg%3E");
+  -webkit-mask-size: 2rem 100%;
+  mask-size: 2rem 100%;
+  -webkit-mask-repeat: repeat-x;
+  mask-repeat: repeat-x;
+  -webkit-mask-position: center bottom;
+  mask-position: center bottom;
+}
+
+/* SplitText: قناع الأسطر يحتاج هامشًا رأسيًا كي لا تُقص نقاط الحروف وتشكيلها */
+.split-line-mask {
+  padding-block: 0.12em;
+  margin-block: -0.12em;
+}
+
+/* ——— الأزرار ——— */
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 3.25rem;
+  padding: 0.75rem 1.6rem;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.2;
+  overflow: hidden;
+  isolation: isolate;
+  transition: color 0.45s var(--ease-settle), border-color 0.45s var(--ease-settle);
+}
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.55s var(--ease-najdi);
+}
+.btn:hover::before {
+  transform: scaleY(1);
+}
+.btn-primary {
+  background: var(--color-clay);
+  color: var(--color-paper);
+}
+.btn-primary::before {
+  background: var(--color-ink);
+}
+.btn-ink {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+.btn-ink::before {
+  background: var(--color-clay);
+}
+.btn-outline {
+  border: 1px solid color-mix(in oklab, var(--color-ink) 30%, transparent);
+  color: var(--color-ink);
+}
+.btn-outline::before {
+  background: var(--color-ink);
+}
+.btn-outline:hover {
+  color: var(--color-paper);
+  border-color: var(--color-ink);
+}
+.btn-light {
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+.btn-light::before {
+  background: var(--color-sand-2);
+}
+.btn-outline-light {
+  border: 1px solid color-mix(in oklab, var(--color-paper) 35%, transparent);
+  color: var(--color-paper);
+}
+.btn-outline-light::before {
+  background: var(--color-paper);
+}
+.btn-outline-light:hover {
+  color: var(--color-ink);
+}
+
+/* رابط بخط سفلي ينمو من البداية */
+.link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 100% 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.5s var(--ease-settle);
+}
+.link-underline:hover,
+.group:hover .link-underline {
+  background-size: 100% 1px;
+}
+
+/* ——— شاشة التحميل ——— */
+html:not(.is-preloading) .preloader {
+  display: none;
+}
+/* صمام أمان: إن تعذّر تشغيل JavaScript لا تبقى الشاشة مغطاة */
+.preloader {
+  animation: preloader-failsafe 0.4s 8s forwards;
+}
+@keyframes preloader-failsafe {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+/* ——— نسيج الجدار الطيني ——— */
+.texture-dots {
+  background-image: radial-gradient(
+    color-mix(in oklab, var(--color-ink) 9%, transparent) 1px,
+    transparent 1.2px
+  );
+  background-size: 18px 18px;
+}
+.texture-dots-light {
+  background-image: radial-gradient(
+    color-mix(in oklab, var(--color-paper) 8%, transparent) 1px,
+    transparent 1.2px
+  );
+  background-size: 18px 18px;
+}
+
+/* ——— نص المقالات ——— */
+.prose-ar p {
+  margin-block: 1rem;
+  color: var(--color-ink-2);
+}
+.prose-ar ul,
+.prose-ar ol {
+  margin-block: 1rem;
+  padding-inline-start: 1.4rem;
+  display: grid;
+  gap: 0.5rem;
+}
+.prose-ar ul {
+  list-style: none;
+}
+.prose-ar ul li {
+  position: relative;
+}
+.prose-ar ul li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: -1.25rem;
+  top: 0.75em;
+  width: 0.45rem;
+  height: 0.45rem;
+  background: var(--color-clay);
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+.prose-ar ol {
+  list-style: decimal;
+}
+.prose-ar ol li::marker {
+  color: var(--color-clay);
+  font-weight: 700;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
