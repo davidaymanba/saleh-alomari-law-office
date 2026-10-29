@@ -1,12 +1,14 @@
 import { Clock, Mail, MapPin, Phone } from "lucide-react";
-import { footerNav, site } from "@/data/site";
-import { practiceAreas } from "@/data/practiceAreas";
+import { footerNav } from "@/lib/nav";
+import { getAreas, getSite } from "@/lib/content/queries";
 import { whatsappUrl } from "@/lib/whatsapp";
 import { Logo } from "@/components/ui/Logo";
 import { TransitionLink } from "@/components/ui/TransitionLink";
 import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 
 export function Footer() {
+  const site = getSite();
+  const practiceAreas = getAreas();
   const year = new Date().getFullYear();
 
   return (
@@ -16,13 +18,13 @@ export function Footer() {
         <div className="texture-dots-light absolute inset-0" aria-hidden="true" />
         <div className="container-x relative grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-12 lg:py-20">
           <div className="lg:col-span-4">
-            <Logo className="[&_svg]:text-clay-soft" />
+            <Logo className="[&_svg]:text-gold-soft" />
             <p className="mt-6 max-w-sm text-sm leading-loose text-paper/65">{site.description}</p>
             <a
-              href={whatsappUrl(site.whatsappGreeting)}
+              href={whatsappUrl(site.contact.whatsapp, site.whatsappGreeting)}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-6 inline-flex items-center gap-2 border border-paper/20 px-4 py-2.5 text-sm font-medium transition-colors duration-300 hover:border-clay-soft hover:text-clay-soft"
+              className="mt-6 inline-flex items-center gap-2 border border-paper/20 px-4 py-2.5 text-sm font-medium transition-colors duration-300 hover:border-gold-soft hover:text-gold-soft"
             >
               <WhatsAppIcon className="size-4.5" />
               راسلنا على واتساب
@@ -30,7 +32,7 @@ export function Footer() {
           </div>
 
           <nav aria-label="روابط الموقع" className="lg:col-span-2">
-            <h2 className="mb-5 font-sans text-sm font-semibold text-clay-soft">الموقع</h2>
+            <h2 className="mb-5 font-sans text-sm font-semibold text-gold-soft">الموقع</h2>
             <ul className="grid gap-2.5 text-sm text-paper/75">
               {footerNav.map((item) => (
                 <li key={item.href}>
@@ -43,7 +45,7 @@ export function Footer() {
           </nav>
 
           <nav aria-label="مجالات الممارسة" className="lg:col-span-3">
-            <h2 className="mb-5 font-sans text-sm font-semibold text-clay-soft">مجالات الممارسة</h2>
+            <h2 className="mb-5 font-sans text-sm font-semibold text-gold-soft">مجالات الممارسة</h2>
             <ul className="grid grid-cols-2 gap-x-4 gap-y-2.5 text-sm text-paper/75 lg:grid-cols-1">
               {practiceAreas.slice(0, 8).map((a) => (
                 <li key={a.slug}>
@@ -56,7 +58,7 @@ export function Footer() {
           </nav>
 
           <div className="lg:col-span-3">
-            <h2 className="mb-5 font-sans text-sm font-semibold text-clay-soft">تواصل معنا</h2>
+            <h2 className="mb-5 font-sans text-sm font-semibold text-gold-soft">تواصل معنا</h2>
             <ul className="grid gap-3.5 text-sm text-paper/75">
               <li className="flex items-start gap-3">
                 <Phone className="mt-1 size-4 shrink-0 text-paper/45" aria-hidden="true" />

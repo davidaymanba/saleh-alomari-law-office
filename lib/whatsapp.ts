@@ -1,7 +1,5 @@
-import { site } from "@/data/site";
-
 /** رابط واتساب مع رسالة مُرمّزة */
-export function whatsappUrl(text?: string, number: string = site.contact.whatsapp) {
+export function whatsappUrl(number: string, text?: string) {
   const base = `https://wa.me/${number.replace(/[\s+()-]/g, "")}`;
   return text ? `${base}?text=${encodeURIComponent(text)}` : base;
 }

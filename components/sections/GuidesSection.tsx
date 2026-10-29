@@ -1,11 +1,12 @@
 import { ArrowLeft } from "lucide-react";
-import { guides } from "@/data/guides";
+import { getGuides } from "@/lib/content/queries";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/motion/Reveal";
 import { SectionHeader } from "./SectionHeader";
 import { GuideCard } from "./GuideCard";
 
 export function GuidesSection() {
+  const guides = getGuides();
   return (
     <section className="container-x py-24 md:py-32">
       <SectionHeader

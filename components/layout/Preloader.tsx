@@ -3,8 +3,8 @@
 import { useRef } from "react";
 import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsap";
 import { endPreload } from "@/lib/motion-state";
-import { site } from "@/data/site";
-import { NajdiMark } from "@/components/ui/NajdiMark";
+import { useSite } from "./SiteProvider";
+import { BrandMark } from "@/components/ui/BrandMark";
 
 import { PRELOAD_KEY } from "@/lib/preload";
 
@@ -13,6 +13,7 @@ import { PRELOAD_KEY } from "@/lib/preload";
  * تُعرض من الخادم مباشرة، ويُخفيها سكربت <head> إن سبق عرضها في الجلسة نفسها.
  */
 export function Preloader() {
+  const site = useSite();
   const ref = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -44,7 +45,8 @@ export function Preloader() {
             finish();
           },
         })
-        .from(q(".mark-path"), { drawSVG: "0%", duration: 1.3, stagger: 0.18, ease: "najdi" })
+        // الشعار يُكشف من اليمين إلى اليسار كاتجاه الكتابة
+        .from(q("[data-pl-logo]"), { clipPath: "inset(0% 0% 0% 100%)", scale: 0.96, duration: 1.5, ease: "najdi" })
         .from(q("[data-pl-text]"), { yPercent: 110, duration: 0.9, stagger: 0.1 }, 0.55)
         .to(q("[data-pl-inner]"), { opacity: 0, y: -24, duration: 0.5, ease: "najdi" }, "+=0.35")
         .to(root, { yPercent: -100, duration: 1.05, ease: "najdi" }, "-=0.15")
@@ -61,13 +63,10 @@ export function Preloader() {
     >
       <div className="relative grid flex-1 place-items-center bg-ink">
         <div data-pl-inner className="flex flex-col items-center gap-6">
-          <NajdiMark className="size-20 text-clay-soft" strokeWidth={1.4} />
+          <span data-pl-logo className="block">
+            <BrandMark height={150} priority />
+          </span>
           <div className="flex flex-col items-center gap-1 text-center">
-            <span className="overflow-hidden py-1">
-              <span data-pl-text className="block font-display text-3xl font-bold">
-                {site.brand.primary}
-              </span>
-            </span>
             <span className="overflow-hidden py-0.5">
               <span data-pl-text className="block text-sm text-paper/60">
                 {site.brand.secondary}

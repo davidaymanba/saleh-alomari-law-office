@@ -5,11 +5,11 @@ import { usePathname, useRouter } from "next/navigation";
 import { gsap, ScrollTrigger, useGSAP, prefersReducedMotion } from "@/lib/gsap";
 import { blockReveal, releaseReveal } from "@/lib/motion-state";
 import { getLenis, scrollToTarget } from "@/lib/lenis-store";
-import { NajdiMark } from "@/components/ui/NajdiMark";
+import { BrandMark } from "@/components/ui/BrandMark";
 
 type Ctx = { navigate: (href: string) => void };
 
-const TransitionContext = createContext<Ctx>({ navigate: () => {} });
+const TransitionContext = createContext<Ctx | null>(null);
 
 export function usePageTransition() {
   return useContext(TransitionContext);
@@ -109,7 +109,7 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
         <div className="crenellation" />
         <div className="grid flex-1 place-items-center bg-ink">
           <span data-curtain-mark className="opacity-0">
-            <NajdiMark className="size-14 text-clay-soft" strokeWidth={1.6} />
+            <BrandMark height={84} />
           </span>
         </div>
         <div className="crenellation rotate-180" />

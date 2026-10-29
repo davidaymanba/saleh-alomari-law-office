@@ -19,7 +19,7 @@ export function SectionHeader({ eyebrow, title, lead, action, dark = false, as =
       <div className="max-w-2xl">
         {eyebrow && (
           <Reveal variant="fade" className="mb-4">
-            <span className={cn("eyebrow", dark && "text-clay-soft")}>{eyebrow}</span>
+            <span className={cn("eyebrow", dark && "text-gold-soft")}>{eyebrow}</span>
           </Reveal>
         )}
         <SplitHeading as={as} className="text-3xl leading-snug md:text-[2.75rem]">

@@ -1,8 +1,9 @@
-import { values } from "@/data/site";
+import { getSite } from "@/lib/content/queries";
 import { Reveal } from "@/components/motion/Reveal";
 import { SectionHeader } from "./SectionHeader";
 
 export function ValuesSection() {
+  const { values } = getSite();
   return (
     <section className="on-dark relative text-paper">
       <div className="crenellation text-ink" aria-hidden="true" />
@@ -18,7 +19,7 @@ export function ValuesSection() {
           <Reveal as="ul" selector="li" stagger={0.1} className="mt-16 grid gap-px bg-paper/12 sm:grid-cols-2 lg:grid-cols-4">
             {values.map((v, i) => (
               <li key={v.title} className="flex flex-col gap-4 bg-ink p-8 lg:min-h-72">
-                <span className="font-display text-5xl font-bold text-clay-soft/30">
+                <span className="font-display text-5xl font-bold text-gold-soft/30">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <h3 className="mt-auto text-2xl">{v.title}</h3>

@@ -3,21 +3,28 @@
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 /*
- * الهوية البصرية: عمارة نجدية — جدار طيني، شُرفات مثلثة، ليل الصحراء.
- * ink: حبر/ليل — paper: جص — sand: طين فاتح — clay: طين محروق (لون التمييز)
+ * الهوية البصرية مأخوذة من شعار المكتب:
+ * أخضر رمادي داكن (#2C3938) للخط، وذهبي (#98835C) للميزان والاسم.
+ * ink: الأخضر الداكن — paper: عاجي — sand: رملي فاتح — gold: الذهبي
+ *
+ * الذهبي الأصلي تباينه 3.4:1 على الخلفية الفاتحة: يصلح للعناوين الكبيرة والزخارف (gold-logo)،
+ * أما النصوص الصغيرة فتستخدم درجة أعمق منه (gold) لتحقق 4.5:1.
  */
 @theme {
-  --color-ink: #16120f;
-  --color-ink-2: #241d18;
-  --color-ink-3: #3a3029;
-  --color-paper: #f5f0e7;
-  --color-sand: #ebe1cf;
-  --color-sand-2: #dccbb0;
-  --color-clay: #97492a;
-  --color-clay-2: #7d3b20;
-  --color-clay-soft: #d39a70;
-  --color-muted: #6a5d51;
-  --color-muted-dark: #b3a593;
+  --color-ink: #1d2a29;
+  --color-ink-2: #2c3938;
+  --color-ink-3: #42514f;
+  --color-paper: #f8f6f1;
+  --color-sand: #eeeae1;
+  --color-sand-2: #ded6c4;
+  --color-gold: #76623d;
+  --color-gold-2: #5f4f31;
+  --color-gold-logo: #98835c;
+  --color-gold-soft: #c9b58b;
+  --color-muted: #5f6b69;
+  --color-muted-dark: #9aa5a2;
+  /* لون علامات الرسوم البيانية: أقرب ذهبي للشعار يجتاز فحوص الإضاءة والتشبع والتباين في الوضعين */
+  --color-chart: #a5853a;
 
   --font-sans: var(--font-plex), system-ui, sans-serif;
   --font-display: var(--font-reem), var(--font-plex), sans-serif;
@@ -32,23 +39,38 @@
  */
 html[data-theme="dark"] {
   color-scheme: dark;
-  --color-ink: #ece4d6;
-  --color-ink-2: #d8cdbd;
-  --color-ink-3: #b9ab98;
-  --color-paper: #13100d;
-  --color-sand: #1c1713;
-  --color-sand-2: #2a221c;
-  --color-clay: #d4875a;
-  --color-clay-soft: #e0a77d;
-  --color-muted: #a99a88;
+  --color-ink: #ece8df;
+  --color-ink-2: #d9d4c9;
+  --color-ink-3: #b9b4a8;
+  --color-paper: #121a19;
+  --color-sand: #18211f;
+  --color-sand-2: #243230;
+  --color-gold: #c4ad7f;
+  --color-gold-2: #d6c39c;
+  --color-gold-soft: #d3c098;
+  --color-muted: #9aa5a2;
 }
 html[data-theme="dark"] .on-dark {
-  --color-ink: #1d1814;
-  --color-ink-2: #262019;
-  --color-ink-3: #3a3029;
-  --color-paper: #ece4d6;
-  --color-clay: #a4542f;
-  --color-clay-soft: #dca27a;
+  --color-ink: #1a2423;
+  --color-ink-2: #22302e;
+  --color-ink-3: #3a4a47;
+  --color-paper: #ece8df;
+  --color-gold: #7a6640;
+  --color-gold-2: #66552f;
+  --color-gold-soft: #d3c098;
+}
+
+/* الشعار: نسخة ملوّنة للخلفيات الفاتحة، ونسخة بخط عاجي للأقسام الداكنة والوضع الليلي */
+.logo-for-dark {
+  display: none;
+}
+html[data-theme="dark"] .logo-for-light,
+.on-dark .logo-for-light {
+  display: none;
+}
+html[data-theme="dark"] .logo-for-dark,
+.on-dark .logo-for-dark {
+  display: block;
 }
 
 /* انتقال تبديل المظهر: دائرة تتسع من زر التبديل (View Transitions) */
@@ -83,18 +105,18 @@ html[data-theme="dark"] .on-dark {
   }
 
   ::selection {
-    background: var(--color-clay);
+    background: var(--color-gold);
     color: var(--color-paper);
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-clay);
+    outline: 2px solid var(--color-gold);
     outline-offset: 3px;
     border-radius: 2px;
   }
 
   .on-dark :focus-visible {
-    outline-color: var(--color-clay-soft);
+    outline-color: var(--color-gold-soft);
   }
 
   input,
@@ -137,7 +159,7 @@ html.lenis body {
   font-size: 0.875rem;
   font-weight: 600;
   letter-spacing: 0.02em;
-  color: var(--color-clay);
+  color: var(--color-gold);
   &::before {
     content: "";
     width: 0.55rem;
@@ -197,18 +219,29 @@ html.lenis body {
   transform: scaleY(1);
 }
 .btn-primary {
-  background: var(--color-clay);
+  background: var(--color-ink-2);
   color: var(--color-paper);
 }
 .btn-primary::before {
-  background: var(--color-ink);
+  background: var(--color-gold);
+}
+/* داخل الأقسام الداكنة يصبح الأساسي ذهبيًا فاتحًا بنص داكن */
+.on-dark .btn-primary {
+  background: var(--color-gold-soft);
+  color: #1d2a29;
+}
+.on-dark .btn-primary::before {
+  background: #ece8df;
 }
 .btn-ink {
   background: var(--color-ink);
   color: var(--color-paper);
 }
 .btn-ink::before {
-  background: var(--color-clay);
+  background: var(--color-gold);
+}
+.btn-light:hover {
+  color: #1d2a29;
 }
 .btn-outline {
   border: 1px solid color-mix(in oklab, var(--color-ink) 30%, transparent);
@@ -226,7 +259,7 @@ html.lenis body {
   color: var(--color-ink);
 }
 .btn-light::before {
-  background: var(--color-sand-2);
+  background: var(--color-gold-soft);
 }
 .btn-outline-light {
   border: 1px solid color-mix(in oklab, var(--color-paper) 35%, transparent);
@@ -308,14 +341,14 @@ html:not(.is-preloading) .preloader {
   top: 0.75em;
   width: 0.45rem;
   height: 0.45rem;
-  background: var(--color-clay);
+  background: var(--color-gold);
   clip-path: polygon(50% 0, 100% 100%, 0 100%);
 }
 .prose-ar ol {
   list-style: decimal;
 }
 .prose-ar ol li::marker {
-  color: var(--color-clay);
+  color: var(--color-gold);
   font-weight: 700;
 }
 
@@ -326,4 +359,88 @@ html:not(.is-preloading) .preloader {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
   }
+}
+
+/* ——— لوحة التحكم ——— */
+.abtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 2.5rem;
+  padding: 0.45rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.2;
+  border: 1px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s, opacity 0.2s;
+}
+.abtn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.abtn-primary {
+  background: var(--color-ink-2);
+  color: var(--color-paper);
+}
+.abtn-primary:hover:not(:disabled) {
+  background: var(--color-gold);
+  color: var(--color-paper);
+}
+.abtn-ghost {
+  border-color: color-mix(in oklab, var(--color-ink) 18%, transparent);
+  color: var(--color-ink);
+}
+.abtn-ghost:hover:not(:disabled) {
+  border-color: color-mix(in oklab, var(--color-ink) 45%, transparent);
+  background: color-mix(in oklab, var(--color-ink) 5%, transparent);
+}
+.abtn-danger {
+  border-color: color-mix(in oklab, #b42318 40%, transparent);
+  color: #b42318;
+}
+.abtn-danger:hover:not(:disabled) {
+  background: #b42318;
+  color: #fff;
+}
+html[data-theme="dark"] .abtn-danger {
+  color: #f97066;
+  border-color: color-mix(in oklab, #f97066 40%, transparent);
+}
+html[data-theme="dark"] .abtn-danger:hover:not(:disabled) {
+  background: #b42318;
+  color: #fff;
+}
+.abtn-sm {
+  min-height: 2rem;
+  padding: 0.3rem 0.65rem;
+  font-size: 0.8rem;
+}
+
+.ainput {
+  width: 100%;
+  border: 1px solid color-mix(in oklab, var(--color-ink) 18%, transparent);
+  background: var(--color-paper);
+  padding: 0.6rem 0.8rem;
+  font-size: 0.925rem;
+  line-height: 1.6;
+  transition: border-color 0.2s;
+}
+.ainput:hover {
+  border-color: color-mix(in oklab, var(--color-ink) 35%, transparent);
+}
+.ainput:focus {
+  outline: none;
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-gold) 18%, transparent);
+}
+.ainput[aria-invalid="true"] {
+  border-color: #d92d20;
+}
+
+.acard {
+  background: var(--color-paper);
+  border: 1px solid color-mix(in oklab, var(--color-ink) 10%, transparent);
 }

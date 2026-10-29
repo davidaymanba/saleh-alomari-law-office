@@ -1,11 +1,14 @@
-import { site } from "@/data/site";
+"use client";
+
+import { useSite } from "@/components/layout/SiteProvider";
 import { cn } from "@/lib/utils";
-import { NajdiMark } from "./NajdiMark";
+import { BrandMark } from "./BrandMark";
 
 export function Logo({ className, compact = false }: { className?: string; compact?: boolean }) {
+  const site = useSite();
   return (
     <span className={cn("inline-flex items-center gap-3", className)}>
-      <NajdiMark className="size-10 text-clay" strokeWidth={2.2} />
+      <BrandMark height={compact ? 46 : 60} priority />
       <span className="flex flex-col leading-none">
         <span className="font-display text-xl font-bold tracking-tight">{site.brand.primary}</span>
         {!compact && (

@@ -11,11 +11,12 @@ type Props = ComponentProps<typeof Link> & { href: string };
  * النقرات المعدّلة (Ctrl/⌘/Shift/الزر الأوسط) والروابط الخارجية تعمل بشكل طبيعي.
  */
 export function TransitionLink({ href, onClick, target, ...rest }: Props) {
-  const { navigate } = usePageTransition();
+  const transition = usePageTransition();
 
   const handle = (e: MouseEvent<HTMLAnchorElement>) => {
     onClick?.(e);
     if (
+      !transition ||
       e.defaultPrevented ||
       e.button !== 0 ||
       e.metaKey ||
@@ -28,7 +29,7 @@ export function TransitionLink({ href, onClick, target, ...rest }: Props) {
       return;
     }
     e.preventDefault();
-    navigate(href);
+    transition.navigate(href);
   };
 
   return <Link href={href} target={target} onClick={handle} {...rest} />;

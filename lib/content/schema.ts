@@ -5,14 +5,17 @@
 import { z } from "zod";
 import { iconKeys } from "@/data/icons";
 
-const req = (label: string) => z.string().trim().min(1, `${label}: هذا الحقل مطلوب`);
+/** الرسالة تظهر تحت الحقل نفسه، لذا لا تكرر اسمه (label للتوثيق فقط) */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const req = (label: string) => z.string().trim().min(1, "هذا الحقل مطلوب");
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const slug = (label = "المعرّف") =>
   z
     .string()
     .trim()
-    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, `${label}: أحرف إنجليزية صغيرة وأرقام وشرطات فقط (مثل family-law)`);
-const lines = (label: string) =>
-  z.array(z.string().trim().min(1)).min(1, `${label}: أضف عنصرًا واحدًا على الأقل`);
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "أحرف إنجليزية صغيرة وأرقام وشرطات فقط (مثل family-law)");
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const lines = (label: string) => z.array(z.string().trim().min(1)).min(1, "أضف سطرًا واحدًا على الأقل");
 
 export const tracks = {
   individuals: {

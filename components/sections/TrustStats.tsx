@@ -1,8 +1,9 @@
-import { trustStats } from "@/data/site";
+import { getSite } from "@/lib/content/queries";
 import { Counter } from "@/components/motion/Counter";
 import { Reveal } from "@/components/motion/Reveal";
 
 export function TrustStats() {
+  const { trustStats } = getSite();
   return (
     <section aria-label="مؤشرات" className="container-x">
       <Reveal
@@ -18,9 +19,8 @@ export function TrustStats() {
             className={`flex flex-col-reverse gap-2 px-2 py-8 md:px-6 md:py-10 ${i % 2 === 1 ? "border-s border-ink/15" : ""} ${i >= 2 ? "border-t border-ink/15 lg:border-t-0" : ""} ${i === 2 ? "lg:border-s" : ""}`}
           >
             <dt className="text-sm leading-relaxed text-muted md:text-base">{s.label}</dt>
-            <dd className="font-display text-4xl font-bold text-clay md:text-5xl">
+            <dd className="font-display text-4xl font-bold text-gold md:text-5xl">
               {typeof s.value === "number" ? <Counter value={s.value} /> : s.value}
-              {s.suffix}
             </dd>
           </div>
         ))}

@@ -1,5 +1,5 @@
 import { ArrowLeft } from "lucide-react";
-import { homeFaq } from "@/data/faq";
+import { getHomeFaq } from "@/lib/content/queries";
 import { Accordion } from "@/components/ui/Accordion";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/motion/Reveal";
@@ -18,7 +18,7 @@ export function FaqSection() {
           </Reveal>
         </div>
         <Reveal className="lg:col-span-8">
-          <Accordion items={homeFaq} />
+          <Accordion items={getHomeFaq()} />
         </Reveal>
       </div>
     </section>

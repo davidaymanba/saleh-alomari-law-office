@@ -1,5 +1,5 @@
 import { ArrowLeft } from "lucide-react";
-import { team } from "@/data/team";
+import { getTeam } from "@/lib/content/queries";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/motion/Reveal";
 import { Parallax } from "@/components/motion/Parallax";
@@ -7,7 +7,9 @@ import { SplitHeading } from "@/components/motion/SplitHeading";
 import { Monogram } from "./Monogram";
 
 export function FounderSection() {
+  const team = getTeam();
   const founder = team.find((m) => m.featured) ?? team[0];
+  if (!founder) return null;
 
   return (
     <section className="container-x grid items-center gap-12 py-24 md:py-32 lg:grid-cols-12 lg:gap-16">
@@ -24,7 +26,7 @@ export function FounderSection() {
         </Reveal>
         <SplitHeading className="text-3xl md:text-[2.75rem]">{founder.name}</SplitHeading>
         <Reveal selector="[data-r]" stagger={0.1} delay={0.1}>
-          <p data-r className="mt-2 font-medium text-clay">
+          <p data-r className="mt-2 font-medium text-gold">
             {founder.role}
           </p>
           <p data-r className="mt-6 text-lg leading-loose text-muted">

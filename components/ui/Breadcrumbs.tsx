@@ -1,11 +1,12 @@
 import { ChevronLeft } from "lucide-react";
-import { site } from "@/data/site";
+import { getSite } from "@/lib/content/queries";
 import { TransitionLink } from "./TransitionLink";
 
 export type Crumb = { href: string; label: string };
 
 /** مسار التنقل مع بيانات BreadcrumbList المنظمة */
 export function Breadcrumbs({ items }: { items: Crumb[] }) {
+  const site = getSite();
   const all = [{ href: "/", label: "الرئيسية" }, ...items];
   const jsonLd = {
     "@context": "https://schema.org",

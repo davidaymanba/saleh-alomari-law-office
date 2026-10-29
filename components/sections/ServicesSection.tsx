@@ -1,5 +1,5 @@
 import { ArrowLeft } from "lucide-react";
-import { services } from "@/data/services";
+import { getServices } from "@/lib/content/queries";
 import { Icon } from "@/components/ui/Icon";
 import { Button } from "@/components/ui/Button";
 import { TransitionLink } from "@/components/ui/TransitionLink";
@@ -7,6 +7,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import { SectionHeader } from "./SectionHeader";
 
 export function ServicesSection() {
+  const services = getServices();
   return (
     <section className="container-x py-24 md:py-32">
       <SectionHeader
@@ -29,17 +30,17 @@ export function ServicesSection() {
               <span className="hidden font-display text-sm text-muted md:block">
                 {String(i + 1).padStart(2, "0")}
               </span>
-              <span className="grid size-12 place-items-center border border-ink/15 text-clay transition-colors duration-500 group-hover:border-clay group-hover:bg-clay group-hover:text-paper md:size-14">
+              <span className="grid size-12 place-items-center border border-ink/15 text-gold transition-colors duration-500 group-hover:border-gold group-hover:bg-gold group-hover:text-paper md:size-14">
                 <Icon name={s.icon} className="size-6" />
               </span>
               <span className="flex flex-col gap-1.5 md:flex-row md:items-baseline md:gap-10">
-                <span className="font-display text-xl font-semibold transition-colors duration-300 group-hover:text-clay md:min-w-56 md:text-2xl">
+                <span className="font-display text-xl font-semibold transition-colors duration-300 group-hover:text-gold md:min-w-56 md:text-2xl">
                   {s.title}
                 </span>
                 <span className="text-sm leading-relaxed text-muted md:text-base">{s.description}</span>
               </span>
               <ArrowLeft
-                className="size-5 shrink-0 text-muted transition-transform duration-500 ease-[var(--ease-settle)] group-hover:-translate-x-2 group-hover:text-clay"
+                className="size-5 shrink-0 text-muted transition-transform duration-500 ease-[var(--ease-settle)] group-hover:-translate-x-2 group-hover:text-gold"
                 aria-hidden="true"
               />
             </TransitionLink>

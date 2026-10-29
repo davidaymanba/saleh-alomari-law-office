@@ -5,7 +5,8 @@ import { usePathname } from "next/navigation";
 import { Phone } from "lucide-react";
 import { gsap, ScrollTrigger, useGSAP, prefersReducedMotion } from "@/lib/gsap";
 import { getLenis } from "@/lib/lenis-store";
-import { mainNav, site } from "@/data/site";
+import { mainNav } from "@/lib/nav";
+import { useSite } from "./SiteProvider";
 import { whatsappUrl } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/ui/Logo";
@@ -19,6 +20,7 @@ function isActive(pathname: string, href: string) {
 }
 
 export function Header() {
+  const site = useSite();
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -128,15 +130,15 @@ export function Header() {
                       href={item.href}
                       aria-current={active ? "page" : undefined}
                       className={cn(
-                        "relative py-2 transition-colors duration-300 hover:text-clay",
-                        active && "text-clay",
+                        "relative py-2 transition-colors duration-300 hover:text-gold",
+                        active && "text-gold",
                       )}
                     >
                       {item.label}
                       <span
                         aria-hidden="true"
                         className={cn(
-                          "absolute -bottom-0.5 left-1/2 size-1.5 -translate-x-1/2 rotate-45 bg-clay transition-transform duration-500",
+                          "absolute -bottom-0.5 left-1/2 size-1.5 -translate-x-1/2 rotate-45 bg-gold transition-transform duration-500",
                           active ? "scale-100" : "scale-0",
                         )}
                       />
@@ -201,7 +203,7 @@ export function Header() {
                     aria-current={pathname === item.href ? "page" : undefined}
                     className={cn(
                       "flex items-baseline gap-4 py-2 font-display text-3xl font-semibold sm:text-4xl",
-                      pathname === item.href && "text-clay-soft",
+                      pathname === item.href && "text-gold-soft",
                     )}
                   >
                     <span className="font-sans text-xs font-medium text-paper/40">
@@ -218,7 +220,7 @@ export function Header() {
               اطلب استشارة
             </Button>
             <div className="flex flex-wrap gap-x-8 gap-y-3 text-paper/75">
-              <a href={whatsappUrl(site.whatsappGreeting)} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2">
+              <a href={whatsappUrl(site.contact.whatsapp, site.whatsappGreeting)} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2">
                 <WhatsAppIcon className="size-4.5" /> واتساب
               </a>
               <a href={`tel:${site.contact.phoneHref}`} className="inline-flex items-center gap-2">

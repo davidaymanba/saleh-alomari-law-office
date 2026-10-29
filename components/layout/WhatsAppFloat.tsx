@@ -4,10 +4,11 @@ import { useRef } from "react";
 import { gsap, useGSAP, MQ } from "@/lib/gsap";
 import { onRevealReady } from "@/lib/motion-state";
 import { whatsappUrl } from "@/lib/whatsapp";
-import { site } from "@/data/site";
+import { useSite } from "./SiteProvider";
 import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 
 export function WhatsAppFloat() {
+  const site = useSite();
   const ref = useRef<HTMLAnchorElement>(null);
 
   useGSAP(
@@ -29,7 +30,7 @@ export function WhatsAppFloat() {
   return (
     <a
       ref={ref}
-      href={whatsappUrl(site.whatsappGreeting)}
+      href={whatsappUrl(site.contact.whatsapp, site.whatsappGreeting)}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="تواصل معنا عبر واتساب"

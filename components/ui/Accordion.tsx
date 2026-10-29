@@ -56,14 +56,14 @@ export function Accordion({
                 onClick={() => setOpen(isOpen ? null : i)}
                 className="group flex w-full cursor-pointer items-center justify-between gap-6 py-5 text-start"
               >
-                <span className={cn("transition-colors duration-300", !isOpen && "group-hover:text-clay")}>
+                <span className={cn("transition-colors duration-300", !isOpen && "group-hover:text-gold")}>
                   {item.q}
                 </span>
                 <span
                   aria-hidden="true"
                   className={cn(
                     "relative grid size-9 shrink-0 place-items-center border transition-colors duration-500",
-                    isOpen ? "border-clay bg-clay text-paper" : dark ? "border-paper/25" : "border-ink/20",
+                    isOpen ? "border-gold bg-gold text-paper" : dark ? "border-paper/25" : "border-ink/20",
                   )}
                 >
                   <span className="absolute h-px w-3.5 bg-current" />

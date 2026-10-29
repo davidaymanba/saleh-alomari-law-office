@@ -48,23 +48,6 @@ export const seedSite = {
   feesNote: "الرسوم تُحدد بعد دراسة الطلب",
 } satisfies Omit<SiteSettings, "trustStats" | "values" | "processSteps">;
 
-export type NavItem = { href: string; label: string };
-
-export const mainNav: NavItem[] = [
-  { href: "/about", label: "من نحن" },
-  { href: "/services", label: "الخدمات" },
-  { href: "/practice-areas", label: "مجالات الممارسة" },
-  { href: "/team", label: "الفريق" },
-  { href: "/guides", label: "أدلة قانونية" },
-  { href: "/contact", label: "تواصل معنا" },
-];
-
-export const footerNav: NavItem[] = [
-  { href: "/", label: "الرئيسية" },
-  ...mainNav,
-  { href: "/faq", label: "الأسئلة الشائعة" },
-  { href: "/consultation", label: "اطلب استشارة" },
-];
 
 /** مؤشرات الثقة: القيم الرقمية تُعدّ تصاعديًا، والقيم بين الأقواس تُعرض كما هي حتى تُستبدل */
 export const seedTrustStats: SiteSettings["trustStats"] = [

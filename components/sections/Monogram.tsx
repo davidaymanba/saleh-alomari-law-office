@@ -1,4 +1,4 @@
-import { NajdiMark } from "@/components/ui/NajdiMark";
+import { BrandMark } from "@/components/ui/BrandMark";
 import { cn } from "@/lib/utils";
 
 /** صورة رمزية بالحروف الأولى أو بعلامة المكتب (إلى أن تُضاف صور الفريق) */
@@ -8,9 +8,9 @@ export function Monogram({ initials, className }: { initials?: string; className
       <div className="texture-dots absolute inset-0" />
       <div className="crenellation absolute inset-x-0 bottom-0 text-sand-2" />
       {initials ? (
-        <span className="relative font-display text-6xl font-bold text-clay">{initials}</span>
+        <span className="relative font-display text-6xl font-bold text-gold">{initials}</span>
       ) : (
-        <NajdiMark className="relative size-16 text-clay/70" strokeWidth={1.5} />
+        <BrandMark height={120} className="opacity-70" />
       )}
     </div>
   );

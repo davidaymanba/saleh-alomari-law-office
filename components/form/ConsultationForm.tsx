@@ -8,9 +8,10 @@ import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsap";
 import { scrollToTarget } from "@/lib/lenis-store";
 import { buildConsultationMessage, whatsappUrl } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
-import { practiceAreas, tracks } from "@/data/practiceAreas";
-import { services } from "@/data/services";
+import { tracks, trackKeys, type Track } from "@/lib/content/schema";
+import { submitConsultation } from "@/app/(site)/consultation/actions";
 import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
+import { useSite } from "@/components/layout/SiteProvider";
 import {
   OTHER,
   applicantTypes,
@@ -21,10 +22,15 @@ import {
   type ConsultationValues,
 } from "./schema";
 
-type Props = { defaultService?: string; defaultArea?: string };
+type Props = {
+  defaultService?: string;
+  defaultArea?: string;
+  areas: { slug: string; title: string; track: Track }[];
+  services: { slug: string; title: string }[];
+};
 
 const inputCls =
-  "w-full border border-ink/20 bg-paper px-4 py-3.5 text-base transition-colors duration-300 placeholder:text-muted/60 hover:border-ink/40 focus:border-clay focus:outline-none aria-[invalid=true]:border-clay";
+  "w-full border border-ink/20 bg-paper px-4 py-3.5 text-base transition-colors duration-300 placeholder:text-muted/60 hover:border-ink/40 focus:border-gold focus:outline-none aria-[invalid=true]:border-gold";
 
 function Field({
   id,
@@ -49,7 +55,7 @@ function Field({
       {children}
       {hint && !error && <p id={`${id}-hint`} className="text-xs text-muted">{hint}</p>}
       {error && (
-        <p id={`${id}-error`} role="alert" className="text-sm font-medium text-clay">
+        <p id={`${id}-error`} role="alert" className="text-sm font-medium text-gold">
           {error.message}
         </p>
       )}
@@ -77,14 +83,14 @@ function Choice({
         {options.map((o) => (
           <label key={o} className="relative cursor-pointer">
             <input type="radio" value={o} {...register(name)} className="peer sr-only" />
-            <span className="inline-flex border border-ink/20 px-4 py-2.5 text-sm font-medium transition-colors duration-300 peer-checked:border-ink peer-checked:bg-ink peer-checked:text-paper peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-clay hover:border-ink/50">
+            <span className="inline-flex border border-ink/20 px-4 py-2.5 text-sm font-medium transition-colors duration-300 peer-checked:border-ink peer-checked:bg-ink peer-checked:text-paper peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-gold hover:border-ink/50">
               {o}
             </span>
           </label>
         ))}
       </div>
       {error && (
-        <p id={`${name}-error`} role="alert" className="text-sm font-medium text-clay">
+        <p id={`${name}-error`} role="alert" className="text-sm font-medium text-gold">
           {error.message}
         </p>
       )}
@@ -92,11 +98,14 @@ function Choice({
   );
 }
 
-export function ConsultationForm({ defaultService, defaultArea }: Props) {
+export function ConsultationForm({ defaultService, defaultArea, areas: practiceAreas, services }: Props) {
+  const waNumber = useSite().contact.whatsapp;
   const area = practiceAreas.find((a) => a.slug === defaultArea);
   const service = services.find((s) => s.slug === defaultService);
   const [message, setMessage] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [saved, setSaved] = useState<boolean | null>(null);
+  const honeypot = useRef<HTMLInputElement>(null);
   const root = useRef<HTMLDivElement>(null);
 
   const {
@@ -122,8 +131,11 @@ export function ConsultationForm({ defaultService, defaultArea }: Props) {
 
   const detailsLength = (watch("details") ?? "").length;
 
-  const onValid = (v: ConsultationValues) => {
+  const onValid = async (v: ConsultationValues) => {
     setCopied(false);
+    // يُحفظ الطلب في نظام المكتب؛ وإن تعذّر الحفظ يبقى مسار واتساب متاحًا
+    const res = await submitConsultation(v, honeypot.current?.value ?? "").catch(() => null);
+    setSaved(!!res?.ok);
     setMessage(buildConsultationMessage(v));
   };
 
@@ -162,15 +174,17 @@ export function ConsultationForm({ defaultService, defaultArea }: Props) {
       {message ? (
         <div data-step className="border border-ink/15 bg-paper p-6 md:p-10" aria-live="polite">
           <span className="eyebrow">الخطوة الأخيرة</span>
-          <h2 className="mt-3 text-2xl md:text-3xl">رسالتك جاهزة للإرسال</h2>
+          <h2 className="mt-3 text-2xl md:text-3xl">{saved ? "وصلنا طلبك" : "رسالتك جاهزة للإرسال"}</h2>
           <p className="mt-3 leading-relaxed text-muted">
-            راجع نص الرسالة، ثم اضغط «إرسال عبر واتساب». سيفتح واتساب بالرسالة جاهزة، وترسلها أنت بنفسك.
+            {saved
+              ? "سجّلنا طلبك وسيتواصل معك الفريق قريبًا. لتسريع التواصل يمكنك أيضًا إرساله عبر واتساب:"
+              : "راجع نص الرسالة، ثم اضغط «إرسال عبر واتساب». سيفتح واتساب بالرسالة جاهزة، وترسلها أنت بنفسك."}
           </p>
-          <pre className="mt-6 max-h-96 overflow-auto border-s-2 border-clay bg-sand/60 p-5 font-sans text-sm leading-loose whitespace-pre-wrap" data-lenis-prevent>
+          <pre className="mt-6 max-h-96 overflow-auto border-s-2 border-gold bg-sand/60 p-5 font-sans text-sm leading-loose whitespace-pre-wrap" data-lenis-prevent>
             {message}
           </pre>
           <div className="mt-8 flex flex-wrap gap-3">
-            <a href={whatsappUrl(message)} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
+            <a href={whatsappUrl(waNumber, message)} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
               <WhatsAppIcon className="size-5" />
               إرسال عبر واتساب
             </a>
@@ -204,7 +218,7 @@ export function ConsultationForm({ defaultService, defaultArea }: Props) {
                   <option value="" disabled>
                     اختر نوع القضية
                   </option>
-                  {(["individuals", "companies"] as const).map((t) => (
+                  {trackKeys.map((t) => (
                     <optgroup key={t} label={tracks[t].title}>
                       {practiceAreas
                         .filter((a) => a.track === t)
@@ -311,31 +325,37 @@ export function ConsultationForm({ defaultService, defaultArea }: Props) {
           </section>
 
           <div className="grid gap-6 border-t border-ink/15 pt-8">
+            <div aria-hidden="true" className="absolute -start-[9999px] size-px overflow-hidden">
+              <label>
+                اترك هذا الحقل فارغًا
+                <input ref={honeypot} type="text" name="website" tabIndex={-1} autoComplete="off" />
+              </label>
+            </div>
             <label className="flex cursor-pointer items-start gap-3 text-sm leading-relaxed">
               <input
                 type="checkbox"
                 {...register("consent")}
                 aria-invalid={!!errors.consent}
                 aria-describedby={describe("consent")}
-                className="mt-1 size-4.5 shrink-0 cursor-pointer accent-clay"
+                className="mt-1 size-4.5 shrink-0 cursor-pointer accent-gold"
               />
               <span>
-                أقرّ بأن إرسال الطلب لا يُعد توكيلًا ولا ينشئ علاقة محامٍ وموكل، وأن الرسوم تُحدد بعد دراسة الطلب.
+                أقرّ بأن إرسال الطلب لا يُعد توكيلًا ولا ينشئ علاقة محامٍ وموكل، وأن الرسوم تُحدد بعد دراسة الطلب، وأوافق على حفظ بيانات الطلب لدى المكتب للتواصل معي بشأنه.
               </span>
             </label>
             {errors.consent && (
-              <p id="consent-error" role="alert" className="-mt-3 text-sm font-medium text-clay">
+              <p id="consent-error" role="alert" className="-mt-3 text-sm font-medium text-gold">
                 {errors.consent.message}
               </p>
             )}
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <p className="inline-flex items-center gap-2 text-sm text-muted">
-                <ShieldCheck className="size-4.5 text-clay" aria-hidden="true" />
-                لا تُحفظ بياناتك في الموقع؛ تُجهَّز في رسالة ترسلها أنت.
+                <ShieldCheck className="size-4.5 text-gold" aria-hidden="true" />
+                بياناتك سرية، ولا يطّلع عليها إلا فريق المكتب.
               </p>
               <button type="submit" disabled={isSubmitting} className="btn btn-primary cursor-pointer disabled:opacity-60">
                 <WhatsAppIcon className="size-5" />
-                تجهيز الرسالة
+                {isSubmitting ? "جارٍ الإرسال…" : "إرسال الطلب"}
               </button>
             </div>
           </div>

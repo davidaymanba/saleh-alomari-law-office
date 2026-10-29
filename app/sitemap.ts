@@ -1,9 +1,8 @@
 import type { MetadataRoute } from "next";
-import { site } from "@/data/site";
-import { practiceAreas } from "@/data/practiceAreas";
-import { guides } from "@/data/guides";
+import { getAreas, getGuides, getSite } from "@/lib/content/queries";
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  const site = getSite();
   const staticRoutes = [
     "",
     "/about",
@@ -22,12 +21,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [
     ...staticRoutes,
-    ...practiceAreas.map((a) => ({
+    ...getAreas().map((a) => ({
       url: `${site.url}/practice-areas/${a.slug}`,
       changeFrequency: "monthly" as const,
       priority: 0.7,
     })),
-    ...guides.map((g) => ({
+    ...getGuides().map((g) => ({
       url: `${site.url}/guides/${g.slug}`,
       lastModified: g.publishedAt,
       changeFrequency: "yearly" as const,

@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { gsap, Flip, useGSAP, prefersReducedMotion } from "@/lib/gsap";
-import { getAreasByTrack, tracks, type Track } from "@/data/practiceAreas";
+import { tracks, type PracticeArea, type Track } from "@/lib/content/schema";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import { SectionHeader } from "./SectionHeader";
@@ -12,7 +12,7 @@ import { AreaCard } from "./AreaCard";
 const order: Track[] = ["individuals", "companies"];
 
 /** مجالات الممارسة بمسارين؛ مؤشر التبويب ينتقل بـ Flip وتظهر البطاقات بتتابع */
-export function PracticeTracks() {
+export function PracticeTracks({ areas: allAreas }: { areas: PracticeArea[] }) {
   const [track, setTrack] = useState<Track>("individuals");
   const root = useRef<HTMLElement>(null);
   const flipState = useRef<Flip.FlipState | null>(null);
@@ -52,7 +52,7 @@ export function PracticeTracks() {
     root.current?.querySelector<HTMLButtonElement>(`#tab-${next}`)?.focus();
   };
 
-  const areas = getAreasByTrack(track);
+  const areas = allAreas.filter((a) => a.track === track);
 
   return (
     <section ref={root} className="relative bg-sand py-24 md:py-32">
@@ -78,7 +78,7 @@ export function PracticeTracks() {
                     onClick={() => select(t)}
                     className={cn(
                       "relative cursor-pointer px-6 py-2.5 text-sm font-semibold transition-colors duration-500 md:px-8",
-                      active ? "text-paper" : "text-ink hover:text-clay",
+                      active ? "text-paper" : "text-ink hover:text-gold",
                     )}
                   >
                     {active && <span data-flip-id="tab-indicator" className="absolute inset-0 bg-ink" aria-hidden="true" />}

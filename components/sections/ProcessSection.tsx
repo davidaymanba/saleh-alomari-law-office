@@ -2,12 +2,18 @@
 
 import { useRef } from "react";
 import { gsap, useGSAP, MQ } from "@/lib/gsap";
-import { processSteps } from "@/data/site";
+import type { SiteSettings } from "@/lib/content/schema";
 import { Reveal } from "@/components/motion/Reveal";
 import { SectionHeader } from "./SectionHeader";
 
 /** خطوات العمل؛ الخط الواصل يُرسم مع التمرير */
-export function ProcessSection({ eyebrow = "آلية العمل" }: { eyebrow?: string }) {
+export function ProcessSection({
+  steps: processSteps,
+  eyebrow = "آلية العمل",
+}: {
+  steps: SiteSettings["processSteps"];
+  eyebrow?: string;
+}) {
   const root = useRef<HTMLElement>(null);
 
   useGSAP(
@@ -40,18 +46,18 @@ export function ProcessSection({ eyebrow = "آلية العمل" }: { eyebrow?: 
         {/* الخط الأفقي (سطح المكتب) — يُرسم من اليمين إلى اليسار */}
         <svg className="absolute inset-x-0 top-7 hidden h-px w-full lg:block" preserveAspectRatio="none" viewBox="0 0 100 1" aria-hidden="true">
           <line x1="100" y1="0.5" x2="0" y2="0.5" style={{ stroke: "var(--color-ink)" }} strokeOpacity="0.15" vectorEffect="non-scaling-stroke" />
-          <line data-process-line x1="100" y1="0.5" x2="0" y2="0.5" style={{ stroke: "var(--color-clay)" }} strokeWidth="2" vectorEffect="non-scaling-stroke" />
+          <line data-process-line x1="100" y1="0.5" x2="0" y2="0.5" style={{ stroke: "var(--color-gold)" }} strokeWidth="2" vectorEffect="non-scaling-stroke" />
         </svg>
         {/* الخط الرأسي (الجوال) */}
         <svg className="absolute top-0 bottom-0 start-7 w-px lg:hidden" preserveAspectRatio="none" viewBox="0 0 1 100" aria-hidden="true">
           <line x1="0.5" y1="0" x2="0.5" y2="100" style={{ stroke: "var(--color-ink)" }} strokeOpacity="0.15" vectorEffect="non-scaling-stroke" />
-          <line data-process-line x1="0.5" y1="0" x2="0.5" y2="100" style={{ stroke: "var(--color-clay)" }} strokeWidth="2" vectorEffect="non-scaling-stroke" />
+          <line data-process-line x1="0.5" y1="0" x2="0.5" y2="100" style={{ stroke: "var(--color-gold)" }} strokeWidth="2" vectorEffect="non-scaling-stroke" />
         </svg>
 
         <Reveal as="ol" selector="li" stagger={0.12} className="relative grid gap-10 lg:grid-cols-4 lg:gap-8">
           {processSteps.map((step, i) => (
             <li key={step.title} className="relative flex gap-6 lg:flex-col">
-              <span className="relative z-10 grid size-14 shrink-0 place-items-center border border-ink/20 bg-paper font-display text-lg font-bold text-clay">
+              <span className="relative z-10 grid size-14 shrink-0 place-items-center border border-ink/20 bg-paper font-display text-lg font-bold text-gold">
                 {String(i + 1).padStart(2, "0")}
               </span>
               <div>
